@@ -23,6 +23,52 @@
 .mobile-select{display:none;width:100%;border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:11px 13px;background:#0b2745;color:#fff;font-weight:800}
 @media(max-width:1120px){.top-inner{grid-template-columns:1fr auto;gap:10px}.brand{grid-column:1}.actions{grid-column:2;grid-row:1}.tabs{grid-column:1/-1}}
 @media(max-width:720px){.top-inner{display:flex;flex-wrap:wrap;padding:11px 11px 10px}.brand{flex:1 1 230px}.brand span{display:none}.tabs{display:none}.mobile-select{display:block;flex:1 1 100%}.actions{margin-left:auto}.icon-btn span{display:none}.stage{min-height:0}}
+
+/* ===== 2026 Premium UI / readability upgrade ===== */
+:root{
+  --navy:#081a2f;--navy2:#102f50;--green:#0b6b63;--cyan:#64ddff;--gold:#ddb95f;
+  --text:#f8fbff;--muted:#b7c6d8;--line:rgba(255,255,255,.13);--glass:rgba(8,26,47,.80)
+}
+html,body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.shell{
+  background:
+    radial-gradient(circle at 86% -8%,rgba(100,221,255,.16),transparent 34%),
+    radial-gradient(circle at 8% 0%,rgba(221,185,95,.08),transparent 24%),
+    linear-gradient(180deg,#061426 0%,#081a2f 100%);
+}
+.top{
+  background:linear-gradient(135deg,rgba(5,18,34,.985),rgba(11,39,68,.98) 58%,rgba(8,78,71,.95));
+  box-shadow:0 18px 54px rgba(0,0,0,.30);
+}
+.top:after{height:3px;background:linear-gradient(90deg,var(--cyan) 0 36%,var(--gold) 54%,#40c8a8 100%);opacity:.9}
+.top-inner{
+  max-width:1720px;padding:18px 24px 17px;gap:22px;
+  grid-template-columns:minmax(330px,1fr) minmax(650px,1.9fr) auto;
+}
+.brand-kicker{font-size:11px;letter-spacing:.16em;color:#c4f3ff}
+.brand strong{margin-top:7px;font-size:clamp(22px,1.75vw,30px);font-weight:900;letter-spacing:-.045em}
+.brand span{margin-top:7px;font-size:12.5px;line-height:1.5;color:#bfd0e2;font-weight:650}
+.tabs{gap:9px;padding:7px;border-radius:20px;background:rgba(3,14,28,.40);box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)}
+.tab{border-radius:15px;padding:12px 13px;transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.tab:hover{transform:translateY(-1px);background:rgba(255,255,255,.075)}
+.tab.active{background:linear-gradient(135deg,rgba(100,221,255,.18),rgba(15,118,110,.18));border-color:rgba(100,221,255,.34);box-shadow:0 12px 28px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.06)}
+.tab b{width:34px;height:34px;border-radius:11px;font-size:12px;font-weight:950}
+.tab strong{font-size:13.5px;letter-spacing:-.02em;font-weight:900}
+.tab small{margin:6px 0 0 43px;color:#9fb1c5;font-size:10.5px;line-height:1.35}
+.tab.active small{color:#c7d7e8}
+.actions{gap:8px}.icon-btn{min-height:42px;padding:10px 14px;border-radius:13px;font-size:12.5px;font-weight:900;transition:.2s ease}
+.icon-btn:hover{background:rgba(255,255,255,.12);box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.stage{background:#f4f7fb}
+.frame{background:#fff}
+.loader-card{padding:34px 38px;border-radius:26px;background:rgba(255,255,255,.07);box-shadow:0 30px 90px rgba(0,0,0,.35)}
+.loader-card strong{font-size:19px;letter-spacing:-.025em}.loader-card span{font-size:12.5px;line-height:1.55}
+.mobile-select{font-size:14px;min-height:46px;border-radius:14px;padding:11px 14px}
+@media(max-width:1180px){.top-inner{grid-template-columns:1fr auto;padding:14px 16px 13px}.brand strong{font-size:24px}.tabs{grid-column:1/-1}.tab strong{font-size:13px}}
+@media(max-width:720px){
+  .top-inner{padding:12px 12px 11px;gap:10px}.brand-kicker{font-size:9.5px}.brand strong{font-size:20px;line-height:1.2}.brand span{display:none}
+  .actions{gap:6px}.icon-btn{min-width:42px;min-height:40px;padding:9px 11px}.mobile-select{font-size:13.5px}
+}
+
 </style>
 </head>
 <body>
@@ -48,10 +94,26 @@ const MODULES=[{"no": "01", "title": "유튜브 주제 우선순위 찾기", "de
 const LABELS=['채널 방향을 정하는 시작 단계','AI와 함께 만드는 콘텐츠 실습','기획을 영상으로 완성하는 제작 단계'];
 const state={index:0,urls:new Array(MODULES.length).fill(null),frames:new Array(MODULES.length).fill(null)};
 const tabs=document.getElementById('tabs'),stage=document.getElementById('stage'),loading=document.getElementById('loading'),select=document.getElementById('mobileSelect');
-function base64ToBlobUrl(base64){const binary=atob(base64),chunk=1024*1024,parts=[];for(let offset=0;offset<binary.length;offset+=chunk){const slice=binary.slice(offset,offset+chunk),bytes=new Uint8Array(slice.length);for(let i=0;i<slice.length;i++)bytes[i]=slice.charCodeAt(i);parts.push(bytes)}return URL.createObjectURL(new Blob(parts,{type:'text/html;charset=utf-8'}))}
+const EMBED_ENHANCEMENT=`<style id="ys-global-enhancement">
+html{scroll-behavior:smooth}body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body,input,button,select,textarea{font-family:Pretendard,"Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+body{letter-spacing:-.015em}
+h1,h2,h3,h4,strong,b{letter-spacing:-.035em}
+button,input,select,textarea{font-size:inherit}
+@media(max-width:720px){body{font-size:15.5px!important;line-height:1.68!important}h1{line-height:1.18!important}h2,h3{line-height:1.28!important}}
+</style>`;
+const EMBED_PROTECTION=`<script id="ys-basic-protection">(()=>{const stop=e=>{e.preventDefault();e.stopPropagation();return false};document.addEventListener('contextmenu',stop,{capture:true});document.addEventListener('dragstart',e=>{if(e.target&&e.target.tagName==='IMG')stop(e)},{capture:true});document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase();if(k==='f12'||(e.ctrlKey&&k==='u')||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||(e.metaKey&&e.altKey&&['i','j','c'].includes(k))){stop(e)}} ,{capture:true});})();<\/script>`;
+function base64ToBlobUrl(base64){
+  const binary=atob(base64),bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  let html=new TextDecoder('utf-8').decode(bytes);
+  if(/<\/head>/i.test(html)) html=html.replace(/<\/head>/i,EMBED_ENHANCEMENT+'</head>'); else html=EMBED_ENHANCEMENT+html;
+  if(/<\/body>/i.test(html)) html=html.replace(/<\/body>/i,EMBED_PROTECTION+'</body>'); else html+=EMBED_PROTECTION;
+  return URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+}
 function ensureFrame(i){if(state.frames[i])return state.frames[i];loading.classList.remove('hide');if(!state.urls[i])state.urls[i]=base64ToBlobUrl(MODULES[i].data);const f=document.createElement('iframe');f.className='frame';f.title=MODULES[i].title;f.setAttribute('allow','clipboard-read; clipboard-write; fullscreen');f.src=state.urls[i];f.addEventListener('load',()=>{if(i===state.index)loading.classList.add('hide')});stage.appendChild(f);state.frames[i]=f;return f}
 function show(i){i=(i+MODULES.length)%MODULES.length;state.index=i;const f=ensureFrame(i);state.frames.forEach((x,n)=>{if(x)x.classList.toggle('active',n===i)});[...tabs.children].forEach((x,n)=>x.classList.toggle('active',n===i));select.value=String(i);document.title=MODULES[i].title+' | 유쌤클래스';if(f.contentDocument&&f.contentDocument.readyState==='complete')loading.classList.add('hide')}
 MODULES.forEach((m,i)=>{const b=document.createElement('button');b.type='button';b.className='tab';b.innerHTML=`<div class="tab-line"><b>${m.no}</b><strong>${m.title}</strong></div><small>${LABELS[i]||m.desc}</small>`;b.title=m.desc;b.addEventListener('click',()=>show(i));tabs.appendChild(b);const o=document.createElement('option');o.value=String(i);o.textContent=`${m.no}. ${m.title}`;select.appendChild(o)});
-select.addEventListener('change',e=>show(Number(e.target.value)));document.getElementById('prevBtn').addEventListener('click',()=>show(state.index-1));document.getElementById('nextBtn').addEventListener('click',()=>show(state.index+1));document.getElementById('reloadBtn').addEventListener('click',()=>{const f=state.frames[state.index];if(f){loading.classList.remove('hide');f.src=f.src}});window.addEventListener('keydown',e=>{if(e.altKey&&e.key==='ArrowRight')show(state.index+1);if(e.altKey&&e.key==='ArrowLeft')show(state.index-1)});show(0);window.addEventListener('beforeunload',()=>state.urls.forEach(u=>u&&URL.revokeObjectURL(u)));
+select.addEventListener('change',e=>show(Number(e.target.value)));document.getElementById('prevBtn').addEventListener('click',()=>show(state.index-1));document.getElementById('nextBtn').addEventListener('click',()=>show(state.index+1));document.getElementById('reloadBtn').addEventListener('click',()=>{const f=state.frames[state.index];if(f){loading.classList.remove('hide');f.src=f.src}});window.addEventListener('keydown',e=>{if(e.altKey&&e.key==='ArrowRight')show(state.index+1);if(e.altKey&&e.key==='ArrowLeft')show(state.index-1)});const blockContext=e=>{e.preventDefault();e.stopPropagation();return false};document.addEventListener('contextmenu',blockContext,{capture:true});window.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase();if(k==='f12'||(e.ctrlKey&&k==='u')||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||(e.metaKey&&e.altKey&&['i','j','c'].includes(k))){blockContext(e)}},{capture:true});show(0);window.addEventListener('beforeunload',()=>state.urls.forEach(u=>u&&URL.revokeObjectURL(u)));
 </script>
 </body></html>
